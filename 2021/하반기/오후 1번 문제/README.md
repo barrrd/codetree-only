@@ -50,6 +50,21 @@ eggs.append(arr[i][:])
 ]
 
 총 64개의 경로 완전탐색 필요.
+```python
+def product(lst,k):
+    result = []
+    path = []
+    def backtracking():
+        if len(path) == k:
+            result.append(path[:])
+            return
+        for i in range(len(lst)):
+            path.append(lst[i])
+            backtracking()
+            path.pop()
+    backtracking()
+    return result
+```
 
 ```python
 from itertools import product
