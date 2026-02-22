@@ -120,96 +120,136 @@ for r in range(4):
         ans += sum(monster_grid[r][c])
 print(ans)
 
+"""
+from collections import deque
+#
+def product(lst, k):
+    result = []
+    path = []
+    def backtrack():
+        if len(path) == k:
+            result.append(path[:])
+            return
+        for i in range(len(lst)):
+            path.append(lst[i])
+            backtrack()
+            path.pop()
+    backtrack()
+    return result
 
 
-# # 2. execute
-# ######################################
-# # step
-# ######################################
-# for turn in range(t):
-# ######################################
-# # step1&2. copy monster and monster move
-# ######################################
-#     eggs = []
-#     dead_pos = {(r, c) for (r, c, _) in dead}
-#     tmp_pos = []
 
-#     new_arr = []
-#     new_loc = [[0]*4 for _ in range(4)]
-#     pr, pc = ploc[0]-1, ploc[1]-1
-#     # new_loc[pr][pc] = -1
+# 1. init
+## 1. graph
+m, t = map(int, input().split())
+p_pos = list(map(int, input().split()))
+p_pos = [p_pos[0] - 1, p_pos[1] -1 ]
+arr = [list(map(int, input().split()))for _  in range(m)]
+arr = [[a[0] - 1, a[1] - 1, a[2] - 1] for a in arr]
+graph = [[[0]*8 for _ in range(4)] for _ in range(4)] # [r,c,d]
+for r, c, d in arr:
+    graph[r][c][d] +=1
+"""
+[
+[[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]],
+[[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]],
+[[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0]],
+[[0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]]
+]
+"""
+## 2.dir
+mdr = [-1, -1, 0, 1, 1, 1, 0, -1]
+mdc = [0, -1, -1, -1, 0, 1, 1, 1]
+pdr = [-1, 0, 1, 0]
+pdc = [0, -1, 0, 1]
 
-#     for i in range(len(arr)):
-#         r, c, cur_d = arr[i]
-#         eggs.append((arr[i][:]))
-#         move = False
-#         for d in range(8):
-#             nd = (cur_d + d) % 8
-#             nr, nc = r + mr[nd], c + mc[nd]
-#             if not(0 <= nr < 4 and 0 <= nc <4):
-#                 continue
-#             if (nr,nc)==(pr,pc):
-#                 continue
-#             if (nr, nc) not in dead_pos:
-#                     new_arr.append([nr, nc, nd])
-#                     new_loc[nr][nc] += 1
-#                     tmp_pos.append([nr, nc])
-#                     move = True
-#                     break
-#         if not move:
-#             new_arr.append([r, c, cur_d])
-#             new_loc[r][c] += 1
-#     arr = new_arr
-#     # print(loc)
-#     loc = new_loc
-# ######################################
-# # step3.packman move
-# ######################################
-#     best = -1
-#     best_path = None
-#     dead_loc_turn = ()
-#     for pro in products:
-#         pos = []
-#         number = 0
-#         visited = set()
-#         cr,cc = pr, pc
-#         possible = True
-#         for p in pro:
-#             nr, nc = cr + ppr[p], cc + ppc[p]
-#             if not(0 <= nr < 4 and 0 <= nc <4):
-#                 possible = False
-#                 break
-#             if (nr,nc) not in visited:
-#                 number += loc[nr][nc]
-#                 visited.add((nr,nc))
-#                 if loc[nr][nc] > 0:
-#                     pos.append((nr,nc,turn))
-#             cr, cc = nr, nc
-#         if possible:
-#             if best < number:
-#                 best = number
-#                 best_path = [cr,cc]
-#                 dead_loc_turn = tuple(pos)
+# 2. execute
+dead = set() # [r,c,turn]
+for turn in range(t):
+###############################
+# step1. make a eggs
+###############################
+    eggs = [[r[:] for r in row]for row in graph]
+    # print(eggs)
+###############################
+# step2. monster move
+###############################
+    new_graph = [[[0]*8 for _ in range(4)]for _ in range(4)]
+    new_dead = {(r, c) for r, c, _ in dead}
+    pr, pc = p_pos
+    for r in range(4):
+        for c in range(4):
+            for d in range(8):
+                if graph[r][c][d] == 0:
+                    continue
+                cnt = graph[r][c][d]
+                moved = False
+                for i in range(8):
+                    nd = (d + i) % 8
+                    nr, nc = r + mdr[nd], c + mdc[nd]
+                    if not(0 <= nr < 4 and 0 <= nc < 4): continue
+                    if (nr, nc) in new_dead: continue
+                    if (nr, nc) == (pr, pc): continue
+                    new_graph[nr][nc][nd] += cnt
+                    moved = True
+                    break
+                if not moved:
+                    new_graph[r][c][d] += cnt
+    graph = new_graph
 
+###############################
+# step3. packman move
+###############################
+    temp = [0,1,2,3]
+    best = -1
+    best_path = [pr, pc]
+    eaten_cells = []
+    for plst in product(temp,3):
+        visited = set()
+        number = 0
+        cr, cc = pr, pc
+        temp_path = []
+        possible = True
+        for p in plst:
+            nr, nc = cr + pdr[p], cc + pdc[p]
+            if not(0 <= nr < 4 and 0 <= nc < 4): 
+                possible = False
+                break
+            if (nr,nc) in visited: continue
+            visited.add((nr,nc))
+            if sum(graph[nr][nc]) > 0:
+                number += sum(graph[nr][nc])
+                visited.add((nr, nc))
+            temp_path.append((nr, nc))
+            cr, cc = nr, nc
+        if possible and best < number:
+            best = number
+            best_path = [cr, cc]
+            eaten_cells = temp_path
+    temp_dead = []
+    for er, ec in eaten_cells:
+        if sum(graph[er][ec]) > 0:
+            temp_dead.append((er,ec,turn))
+            graph[er][ec] = [0]*8
+    p_pos = best_path
+###############################
+# step4. update a dead
+###############################
+    dead = {d for d in dead if d[2] + 2 > turn}
+    for temp in temp_dead:
+        dead.add(temp)
+###############################
+# step5. hatch a eggs
+###############################
+    for r in range(4):
+        for c in range(4):
+            for d in range(8):
+                graph[r][c][d] += eggs[r][c][d] 
 
-#     ploc = [best_path[0] + 1, best_path[1] + 1]
-#     dead_cells = {(r, c) for (r, c, _) in dead_loc_turn}
-#     arr = [m for m in arr if (m[0], m[1]) not in dead_cells]
-#     for r, c in dead_cells: loc[r][c] = 0 # << 격자 0으로 초기화
-
-# ######################################
-# # step4.update the dead
-# ######################################
-#     dead = {(r, c, t) for (r, c, t) in dead if t + 2 > turn}
-        
-# ######################################
-# # step5. hatch the eggs
-# ######################################
-#     # print(eggs)
-#     for egg in eggs:
-#         arr.append(egg)
-
-#     for dea in dead_loc_turn:
-#         dead.add(dea)
-
-# print(len(arr))
+# 3. answer
+answer = 0
+for r in range(4):
+    for c in range(4):
+        answer += sum(graph[r][c])
+print(answer)
+"""
