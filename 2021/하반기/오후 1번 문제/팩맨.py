@@ -215,12 +215,11 @@ for turn in range(t):
             if not(0 <= nr < 4 and 0 <= nc < 4): 
                 possible = False
                 break
-            if (nr,nc) in visited: continue
-            visited.add((nr,nc))
-            if sum(graph[nr][nc]) > 0:
-                number += sum(graph[nr][nc])
-                visited.add((nr, nc))
             temp_path.append((nr, nc))
+            if (nr,nc) not in visited:
+                visited.add((nr,nc))
+                number += sum(graph[nr][nc])
+            
             cr, cc = nr, nc
         if possible and best < number:
             best = number
