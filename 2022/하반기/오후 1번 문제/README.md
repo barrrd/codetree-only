@@ -1,6 +1,6 @@
-# [삼성 기출] 팩맨
+# [삼성 기출] 코드트리 빵
 
-> **문제 링크**: [코드트리 - 코트드리 빵](https://www.codetree.ai/ko/frequent-problems/samsung-sw/problems/codetree-mon-bread/description)
+> **문제 링크**: [코드트리 - 코드트리 빵](https://www.codetree.ai/ko/frequent-problems/samsung-sw/problems/codetree-mon-bread/description)
 
 ---
 
