@@ -1,6 +1,7 @@
 # [삼성 기출] 메이즈러너
 
 > **문제 링크**: [코드트리 - 메이즈러너](https://www.codetree.ai/ko/frequent-problems/samsung-sw/problems/maze-runner/description)
+> **노션 링크**: [삼성 빈출 정리](https://www.notion.so/27be8e11749780f8aa4dc57ac91b90c9)
 
 ---
 
