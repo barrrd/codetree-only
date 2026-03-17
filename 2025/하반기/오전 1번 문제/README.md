@@ -1,6 +1,6 @@
 # [삼성 기출] 택배 하차 
 
-> > **문제 링크**: [코드트리 - 택배 하차 ](https://www.codetree.ai/ko/frequent-problems/samsung-sw/problems/delivery-service/description)
+> **문제 링크**: [코드트리 - 택배 하차 ](https://www.codetree.ai/ko/frequent-problems/samsung-sw/problems/delivery-service/description)
 
 ---
 
