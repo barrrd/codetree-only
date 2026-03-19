@@ -1,6 +1,6 @@
-# [삼성 기출] 로봇 청소기와 먼지 확산
+# [삼성 기출] AI 로봇청소기
 
-> **문제 링크**: [코드트리 - 로봇 청소기](https://www.codetree.ai/ko/frequent-problems/samsung-sw/problems/robot-cleaner/description)
+> **문제 링크**: [코드트리 - AI 로봇청소기](https://www.codetree.ai/ko/frequent-problems/samsung-sw/problems/ai-robot/description)
 
 ---
 
