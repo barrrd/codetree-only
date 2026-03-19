@@ -23,11 +23,14 @@
 * **➡️ 해결 방법:**
     ```python
     for key in sorted(pos.keys()):
-        sr, sc = pos[key]
-        carr[sr][sc] = 0  # 1. 내 현재 위치 비우기
-        # ... BFS 탐색 (실시간 carr 참조) 후 er, ec 결정 ...
-        pos[key] = [er, ec]
-        carr[er][ec] = key # 2. 내 새 위치 채우기 (다음 로봇이 참고)
+        value = pos[key]
+        sr, sc = value
+        if arr[sr][sc] > 0:
+            continue
+    
+        v = [[False]*n for _ in range(n)]
+        carr[sr][sc] = 0
+        v[sr][sc] = True
     ```
 
 ### 3) Step 4: '합의 나눗셈' vs '나눗셈의 합' (확산 공식)
