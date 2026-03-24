@@ -67,7 +67,7 @@ def step3(mux, dir, santa,dr,dc):
         nxt_santa = arr[nr][nc]
         spos[curr_santa] = [nr, nc]
         arr[nr][nc] = curr_santa
-        
+
         curr_santa = nxt_santa
         nr += dr[dir]
         nc += dc[dir]
@@ -113,9 +113,7 @@ for ts in range(1, T + 1):
     n, m, p, c, d = map(int, input().split())
     der, dec =  map(int, input().split()) # 1.
     der, dec = der - 1, dec -1
-    spos = {} # 2.7681def step2(turn):    for santa in range(1, p + 1):
-
-$0
+    spos = {} # 2.
     stuned = {} # 3.
     answer = [0 for _ in range(p)]
     arr = [[0]*n for _ in range(n)] # 4.
