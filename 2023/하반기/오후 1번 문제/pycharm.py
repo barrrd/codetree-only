@@ -60,12 +60,14 @@ def step3(mux, dir, santa,dr,dc):
         # case2. 빈칸
         if arr[nr][nc] == 0: # not 충돌
             spos[curr_santa] = [nr, nc]
-            arr[nr][nc] = santa
+            arr[nr][nc] = curr_santa
             break
         # case3. 충돌
         ## !!
         nxt_santa = arr[nr][nc]
         spos[curr_santa] = [nr, nc]
+        arr[nr][nc] = curr_santa
+        
         curr_santa = nxt_santa
         nr += dr[dir]
         nc += dc[dir]
@@ -106,12 +108,14 @@ def step2(turn):
             arr[sr + dr[dir]][sc + dc[dir]] = santa
 
 # 1.init
-T = int(input())
+T = 1
 for ts in range(1, T + 1):
     n, m, p, c, d = map(int, input().split())
     der, dec =  map(int, input().split()) # 1.
     der, dec = der - 1, dec -1
-    spos = {} # 2.
+    spos = {} # 2.7681def step2(turn):    for santa in range(1, p + 1):
+
+$0
     stuned = {} # 3.
     answer = [0 for _ in range(p)]
     arr = [[0]*n for _ in range(n)] # 4.
