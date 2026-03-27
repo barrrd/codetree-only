@@ -77,7 +77,7 @@ paths = list(product(range(4), repeat=3))
 
 ---
 
-### 4. Memory Optimization: Object → Count (핵심)
+### `4. Memory Optimization: Object → Count (핵심)`
 
 #### ❌ 문제점
 
