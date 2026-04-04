@@ -1,0 +1,93 @@
+# [HSAT] 자동차 전시장
+
+> **문제 링크**: [코드트리 - 자동차 전시장](https://www.codetree.ai/ko/frequent-problems/hsat/problems/car-showroom/description)
+
+---
+
+## ⚠️ 구현 시 주의해야 할 핵심 포인트
+
+### 1) "누구를 기준으로 길을 찾을 것인가?" (효율성)
+전시장 후보지($N$개)마다 사람들을 찾는 것보다, **사람들($K$명)을 기준으로 전시장 후보지들을 찾는 것**이 훨씬 효율적입니다.
+
+* **전시장 기준:** $N$번의 BFS 수행 ($N=100,000$) ➡️ **시간 초과**
+* **사람 기준:** $K$번의 BFS 수행 ($K=100$) ➡️ **안정적인 통과**
+* **➡️ 해결 방법:** 각 사람의 위치를 시작점으로 하여 모든 노드까지의 최단 거리를 구하는 BFS를 $K$번 반복합니다.
+
+---
+
+### 2) Min-Max 전략: "가장 늦게 오는 사람을 최소화하기"
+전시장의 위치를 결정할 때, 모든 사람이 도착해야 행사가 시작될 수 있습니다. 따라서 각 후보지에서의 점수는 **'가장 멀리서 오는 사람의 시간'**이 됩니다.
+
+* **핵심 로직:**
+    1. 각 노드별로 `max_dist` 배열을 관리합니다.
+    2. 사람 $i$의 BFS 결과가 나오면, `max_dist[node] = max(max_dist[node], dist_i[node])`를 통해 가장 늦은 시간을 갱신합니다.
+    3. 모든 사람의 BFS가 끝나면, `max_dist` 값들 중 **최솟값**을 가진 노드를 선택합니다.
+
+---
+
+### 3) "0초"의 함정 (시작점 처리)
+어떤 사람이 이미 전시장이 지어질 노드에 위치해 있다면 이동 시간은 **0초**입니다. 
+
+* **주의:** `dist > 0`과 같은 조건으로 필터링하면 안 됩니다. 0초 또한 엄연한 도착 성공 사례입니다.
+* **➡️ 해결 방법:** `dist == -1`(도달 불가)인 경우만 제외하고, **0을 포함한 모든 도달 가능 케이스**를 방문 횟수(`vis`)와 최대 거리(`max_dist`) 계산에 포함해야 합니다.
+
+---
+
+### 4) 메모리 관리: 1차원 배열 업데이트
+$N \times K$ 크기의 2차원 배열을 만들면 메모리 초과(MLE) 위험이 있습니다.
+
+* **➡️ 해결 방법:** - `max_dist[N]`: 노드별 최대 도달 시간 저장
+    - `vis_count[N]`: 노드별 도달 가능한 인원수 저장
+    - 사람마다 BFS를 돌린 후 결과값을 위 1차원 배열들에 즉시 누적 업데이트하여 메모리를 절약합니다.
+
+---
+
+### 5) 도달 가능성 검증
+특정 노드에 전시장 후보가 되려면 **$K$명의 사람 전원이 도달 가능**해야 합니다.
+* BFS 종료 후 `vis_count[node] == K`를 만족하는 노드 중에서만 최솟값을 탐색합니다. 만족하는 노드가 없다면 `-1`을 출력합니다.
+
+---
+
+## 📝 최종 코드 구조 (Python)
+
+```python
+from collections import deque
+import sys
+
+# 1. 인접 리스트 구축 (정방향 x -> y)
+adj = [[] for _ in range(n)]
+for x, y in edges:
+    adj[x].append(y)
+
+# 2. 결과 관리를 위한 1차원 배열
+max_dist = [0] * n 
+vis_count = [0] * n 
+
+# 3. 각 사람 위치에서 BFS 실행
+for start_node in start_points:
+    dist = [-1] * n
+    q = deque([start_node])
+    dist[start_node] = 0
+    
+    while q:
+        curr = q.popleft()
+        for nxt in adj[curr]:
+            if dist[nxt] == -1: # 방문하지 않은 경우
+                dist[nxt] = dist[curr] + 1
+                q.append(nxt)
+    
+    # 각 노드 정보 업데이트
+    for i in range(n):
+        if dist[i] != -1: # 도달 성공 시 (0초 포함)
+            max_dist[i] = max(max_dist[i], dist[i])
+            vis_count[i] += 1
+
+# 4. 모든 사람이 모일 수 있는 곳 중 최소 시간 도출
+ans = float('inf')
+found = False
+for i in range(n):
+    if vis_count[i] == k:
+        ans = min(ans, max_dist[i])
+        found = True
+
+print(ans if found else -1)
