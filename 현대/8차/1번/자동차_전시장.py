@@ -38,12 +38,11 @@ for cid in start_points:
 
 # 4. answer
 answer = float("inf")
+found = False
 for idx, cnt in enumerate(ans):
     if vis[idx] != k:
         continue
     answer = min(answer, cnt)
+    found = True
 
-if answer == float("inf"):
-    print(-1)
-else:
-    print(answer)
+print(answer if found else -1)
