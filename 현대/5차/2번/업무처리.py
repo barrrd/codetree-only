@@ -71,5 +71,8 @@ for turn in range(1, R + 1):
                 tree[parent][0].append(job)
             else:
                 tree[parent][1].append(job)
+    for t in tree:
+        print(t)
+    print()
 
 print(answer)
