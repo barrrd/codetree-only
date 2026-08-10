@@ -59,22 +59,25 @@ def step2():
     # 3. rotate
     new_loc = [row[:] for row in loc]
     new_arr = [row[:] for row in arr]
-    new_tr, new_tc = -1, -1
+    n_tr, n_tc = -1, -1
+
     for r in range(sr, sr + length):
         for c in range(sc, sc + length):
-            # 1.
-            orr, occ = r - sr, c - sc
-            # 2. 1, 3 > 3, 2
-            rr, cc = occ, length - 1 - orr
-            # 3.
-            if (r,c) == (tr, tc):
-                new_tr, new_tc = sr + rr, sc + cc
-            new_arr[rr + sr ][cc + sc] = arr[r][c]
-            new_loc[rr + sr ][cc + sc] = loc[r][c]
+            ## 1.local
+            lr, lc = r - sr, c - sc
+            ## 2.rotate: (0,0) > (0,2)
+            rr, rc = lc, length - 1 - lr
+            ## 3.update
+            nr, nc = rr + sr, rc + sc
+
+            new_loc[nr][nc] = loc[r][c]
+            new_arr[nr][nc] = arr[r][c]
+            if (tr, tc) == (r, c):
+                n_tr, n_tc = nr, nc
 
     loc = new_loc
     arr = new_arr
-    tr, tc = new_tr , new_tc
+    tr, tc = n_tr, n_tc
 
 
 # 1.init
