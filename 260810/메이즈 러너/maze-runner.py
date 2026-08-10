@@ -43,11 +43,10 @@ def square():
                         # person
                         if loc[sr][sc] > 0:
                             is_person = True
-                    if is_exit and is_person:
-                        return length, r, c
-                #         break
-                # if is_exit and is_person:
-                #     return length, r, c
+                            
+                        if is_exit and is_person:
+                            return length, r, c
+ 
 
 def step2():
     global arr, loc, left, ans, tr, tc
