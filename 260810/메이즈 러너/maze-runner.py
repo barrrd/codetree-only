@@ -31,17 +31,40 @@ def step1():
 
 def square():
     for length in range(2, n + 1):
-        for r in range(0, n - length + 1):
-            for c in range(0, n - length + 1):
-                p_f, e_f = False, False
+        for r in range(n - length + 1):
+            for c in range(n - length + 1):
+                is_person, is_exit = False, False
+
                 for sr in range(r, r + length):
                     for sc in range(c, c + length):
+                        # exit
                         if arr[sr][sc] == -1:
-                            e_f = True
+                            is_exit = True
+                        # person
                         if loc[sr][sc] > 0:
-                            p_f = True
-                if p_f and e_f:
+                            is_person = True
+                    if is_exit and is_person:
+                        break
+                if is_exit and is_person:
                     return length, r, c
+
+
+
+
+
+
+    # for length in range(2, n + 1):
+    #     for r in range(0, n - length + 1):
+    #         for c in range(0, n - length + 1):
+    #             p_f, e_f = False, False
+    #             for sr in range(r, r + length):
+    #                 for sc in range(c, c + length):
+    #                     if arr[sr][sc] == -1:
+    #                         e_f = True
+    #                     if loc[sr][sc] > 0:
+    #                         p_f = True
+    #             if p_f and e_f:
+    #                 return length, r, c
 
 
 def step2():
