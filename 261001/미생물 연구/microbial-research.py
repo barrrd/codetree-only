@@ -126,7 +126,6 @@ def step3():
             dct[flag] += 1
 
     # 2. 인접
-    v = [[False]*N for _ in range(N)]
     pairs = set()
     for r in range(N):
         for c in range(N):
@@ -136,27 +135,20 @@ def step3():
                 continue
 
 
-            q = deque([(r, c)])
-            while q:
-                sr, sc = q.popleft()
-                for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-                    nr, nc = sr + dr, sc + dc
+            for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                nr, nc = r + dr, c + dc
 
-                    if not in_range(nr,nc):
-                        continue
-                    if arr[nr][nc] == 0:
-                        continue
-                    if v[nr][nc]:
-                        continue
+                if not in_range(nr,nc):
+                    continue
+                if arr[nr][nc] == 0:
+                    continue
 
-                    if arr[nr][nc] == ref:
-                        q.append((nr,nc))
-                        v[nr][nc] = True
-                    else:
-                        nxt = arr[nr][nc]
-
-                        txt = tuple(sorted([ref, nxt]))
-                        pairs.add(txt)
+                nxt = arr[nr][nc]
+                if nxt == ref:
+                    continue
+                    
+                txt = tuple(sorted([ref, nxt]))
+                pairs.add(txt)
 
     # 3. answer
     answer = 0
